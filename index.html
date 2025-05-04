@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESE516_Auto_Card_Dealing_Machine_Gambler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 60px;
+            padding: 0;
+        }
+        header, section, footer {
+            margin-bottom: 20px;
+        }
+        h1,h5{
+            color: #007ACC;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        video {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ESE5160 Auto Card Dealing Machine - Gambler</h1>
+    </header>
+    <br>
+
+
+    <!-- Team Information -->
+    <section class="team-info">
+        <h2>Team Information</h2>
+        <p><strong>Team Number:</strong> 8</p>
+        <p><strong>Team Name:</strong> Gambler</p>
+        <p><strong>Team Members:</strong> Hao Tan, Tianyu Gao</p>
+        <p><strong>GitHub Repository(Full Progress) URL:</strong> 
+            <a href="https://github.com/ese5160/final-project-t08-gambler.git">
+                https://github.com/ese5160/final-project-t08-gambler.git
+            </a>
+        </p>
+
+        <p><strong>Website URL:</strong> 
+            <a href="https://upenn-embedded.github.io/final-project-circuit-circus/" target="_blank">
+                https://github.com/upenn-embedded/final-project-circuit-circus.git
+            </a>  </p>
+        
+        <p><strong>Description of hardware:</strong><br> 
+            SAMW25 Xpro dev board, DRV8833 motor driver, stepper motor, DC motor, TCRT1000 reflective photo sensor, BH1750 light sensor, custom PCB based on SAMW25, SPI display<br>
+        </p>
+    </section>
+    <br><br>
+
+    <!-- 1. Video of the Final Product -->
+    <section>
+        <h2>1. Video Presentation</h2>
+        <hr>
+        <p>Click the picture to watch the video:</p>
+        <div align="center">
+            <a href="https://youtu.be/9yTKktCnmNk?si=0f5C1OaD2GxkAIeO" target="_blank">
+            <img src="Website/images/Cover.jpg" alt="Video Thumbnail" style="width: 100%; max-width: 560px;">
+            </a>
+        </div>
+    </section>
+    <br><br>
+
+
+        <!-- 2. Discription -->
+    <section>
+      <h2>2. Project Summary</h2>
+      <hr>
+
+      <h3>Device Description</h3>
+      <p>
+        The Automated Card Dealer is an IoT-enabled device that distributes playing cards to multiple players with precision and consistency.  
+        It features a motorized card-dealing mechanism controlled via a mobile app or web interface, with support for various card games mode.<br> <br>
+        The system supports remote OTAU (Over-the-Air Update) for one-click firmware upgrades.
+        Currently, it supports <strong>normal</strong> and <strong>Texas Hold'em</strong> modes,
+        and future updates can easily expand to support more game types and flexible player configurations.<br> <br>
+        Additionally, it features card tray monitoring — the device automatically halts operation when no cards remain, ensuring safe and efficient gameplay.
+      </p>
+
+      <h3>Inspiration</h3>
+      <p>
+        Inspired by the success of automatic Mahjong tables in China, we are developing a compact, portable, and affordable automatic poker dealing machine.
+        It supports player count selection, various game modes, and allows users to specify the starting dealer position.
+      </p>
+      <p>
+        As avid card game players, we wanted to eliminate human dealing errors and ensure fair card distribution in games.
+        Traditional card dealing can be inconsistent, slow, and sometimes unfair — our system solves this while introducing IoT capabilities
+        for remote control and real-time monitoring, enhancing both convenience and fairness.
+      </p>
+
+
+
+    <section>
+    <h3>Device Functionality</h3>
+    <p>
+      The core of our Internet-connected card dealer is built around the SAMW25 chip, which provides seamless WiFi communication and integration with a cloud-based dashboard via MQTT. The SAMW25 acts as the central controller, coordinating data exchange and motor control based on commands received from the user or environment.
+    </p>
+
+    <p>
+      Our system includes several mechanical and electronic components working together to deliver precise and intelligent card dealing:
+    </p>
+
+    <ul>
+      <li><strong>BH1750 light sensor:</strong> Detects whether there are cards left in the tray. When the tray is empty, the system automatically stops the dealing process.</li>
+      <li><strong>Stepper motor: </strong> Rotates the dealer arm to face the correct player based on user input.</li>
+      <li><strong>DC motor:</strong> Controls the speed and number of cards being dealt by rotating a roller mechanism.</li>
+    </ul>
+
+    <p>
+      Mechanically, four rods are connected via springs and a pushpad to ensure continuous pressure on the card stack. A shaft coupling links the DC motor with the card feeder to ensure reliable transmission. Together, the stepper motor, DC motor, springs, rods, and pushpad form the integrated mechanical delivery system. <br>
+      You can view an <a href="https://www.youtube.com/watch?v=mnMaH9pMG9w" target="_blank"><strong>exploded view animation here</strong></a> for better understanding of the internal mechanical design.
+    </p> 
+
+    <p>
+      The system is equipped with multiple interaction and control modes:
+    </p>
+
+    <ol>
+      <li><strong>Normal Mode:</strong> Distributes a single card per player in a loop, typically used for casual play.</li>
+      <li><strong>Texas Hold’em Mode:</strong> Implements predefined distribution logic based on Texas Hold’em rules (e.g., 2 hole cards, 5 community cards).</li>
+     <li><strong>OTA Update:</strong> Allows the producer to remotely push firmware updates to the device for improved logic or game support (e.g., Dou Dizhu, Guan Dan).
+      Firmware updates are protected with CRC verification — if the check fails, the system will automatically roll back to a stable golden firmware to ensure continued functionality.
+    </li>
+    </ol>
+
+    <p>
+      All device states and commands are managed through a Node-RED dashboard. Users can select game modes, number of players, and start the dealing process remotely. Light sensor data is also visualized to monitor deck status in real-time.
+    </p>
+
+
+    <h3>Internet Connectivity</h3>
+      <p>
+        Our device uses WiFi connectivity to enable remote control through a Node-RED dashboard.
+        Users can select the number of players, choose between distribution modes (normal or blackjack),
+        and monitor the remaining cards in real-time through a web interface,
+        making the card dealing experience more interactive and customizable.
+      </p>
+
+        <p><strong>Cloud Interaction:</strong> It handles Wi-Fi connection and communicates with the Node-RED dashboard over MQTT. Through the dashboard, users can:</p>
+      <ul>
+        <li>Select game mode (Normal or Texas Hold'em)</li>
+        <li>Set number of players (2–3 supported)</li>
+        <li>Press "Start Distribution" to trigger the sequence</li>
+        <li>Perform OTA updates via a single button</li>
+        <li>Monitor real-time light sensor data</li>
+      </ul>
+    </section>
+
+
+
+    <p><strong>Block diagram of the device is shown below:</strong></p>
+    <div align="center">
+      <img src="Website/images/Detailed_System_Diagram.png" alt="System Block Diagram" style="max-width: 100%; height: auto;">
+    </div>
+  </section>
+
+    <br><br>
+
+    <section>
+  <h3>Challenges</h3>
+  <ul>
+    <strong>Where did you face difficulties? This could be in firmware, hardware, software, integration, etc.</strong>
+  </ul>
+
+  <p>
+    One of the most critical challenges we encountered was related to hardware stability. All three of our custom PCBs had issues, each with different root causes, which made debugging extremely time-consuming. Even after extensive testing and diagnostics, the problems persisted. This raised concerns that SN2 and SN3 might have deeper issues beyond the known USB communication faults, potentially threatening the success of our entire project. Given the limited time, we discussed with our TA and decided to temporarily switch to the SAM W25 Xplained Pro development board for integration and the demo dry run. All debugging and development, including completing milestone A12G, was carried out on the sample board.
+  </p>
+
+  <p>
+    After significant effort, we managed to restore USB communication on SN2 using fly wires, just days before the final demo. We then initiated a full migration of the project back to our custom board. However, we faced unexpected issues during this process, confirming that transitioning everything in just one day was unrealistic. Despite this, we ultimately succeeded in porting the project to our board, including re-enabling features like the screen which had previously been removed due to manufacturing flaws. This hardware migration was an immense challenge that required patience and extensive hands-on debugging.
+  </p>
+
+  <p>
+    Another major difficulty was in mechanical design. Since our system uses friction-based transmission with bearings and must precisely control card output (despite individual cards being extremely thin), the mechanical design demanded extremely high precision and consistency. We went through six different CAD design versions and 3D printed four of them. Each iteration required testing, observation, and adjustment. Tuning the model to achieve both smooth operation and accurate card count control was a long and iterative process.
+  </p>
+
+  <ul>
+    <strong>How did you overcome these challenges?</strong>
+  </ul>
+
+  <p>
+    These were not textbook or commonly documented problems — they were unique to our design. There were no ready-made solutions online or in datasheets. To address them, we relied heavily on trial and error, long hours of debugging, and systematic hardware testing. The PCB transition was completed just three days before demo day after two intensive days of effort. For mechanical issues, we took an iterative prototyping approach, refining our model one step at a time, which is why we ended up with four full 3D-printed assemblies.
+  </p>
+
+  <p>
+    No special method for the problems, we just spent huge amount of time on it.
+  </p>
+</section>
+
+
+<section>
+  <h3>Prototype Learnings</h3>
+  <ul>
+    <strong>What lessons did you learn by building and testing this prototype?</strong>
+  </ul>
+
+  <p>
+    It is honestly hard to summarize what I learned from this course and this project — not because I learned little, but because I learned too much. Every lecture, every assignment, every late night working with teammates, every Ed post we read (sometimes more than ten at once), every OH we attended — each moment was packed with learning.
+  </p>
+
+  <p>
+    I was deeply moved by ESE516. It’s hard to imagine that in less than 15 weeks, we designed our own PCB from scratch, had it fabricated, tested and debugged it, wrote drivers for hardware components, developed a file system and bootloader, implemented firmware flashing and CRC checking, built MQTT-based cloud control, and finally achieved full system integration with remote updates and real-time control. A difficult course usually overwhelms me, but the sheer intensity and workload of ESE516 left no time to panic. We just kept going — focused entirely on the project — until we forgot how difficult the path really was. Looking back, we’ve done so much. We did it, and we are proud of what we built.
+  </p>
+
+  <ul>
+    <strong>What would you do differently if you had to build this device again?</strong>
+  </ul>
+
+  <p>
+    This question makes me think of all the obstacles we faced — it’s hard to even single one out, because at the time each of them felt insurmountable. But I learned a lot: from the PCB design workflow to hands-on Altium use, from how to route traces to how to debug I2C, test voltages and power stages, perform load tests, and integrate hardware in a systematic way. I came into this course never having done PCB design — now I understand not only how to design a board, but also how to bring it up, test it, and fix it when things go wrong. On the software side, I also learned about MQTT communication, remote control, and integration with cloud services.
+  </p>
+
+  <p>
+    If I had to build this device again, I would refine my mechanical design — using a better transmission method, a lower gear ratio, and a higher torque stepper motor. For the PCB, I would reserve more test points and complete a comprehensive bring-up test plan, including checking all hardware subsystems individually before integration. These are things I learned the hard way, and next time, I’ll be ready.
+  </p>
+</section>
+
+<section>
+  <h3>Next Steps & Takeaways</h3>
+  <ul>
+    <strong>What steps are needed to finish or improve this project?</strong>
+  </ul>
+
+  <p>
+    In the future, we plan to expand the functionality of our automated card dealer by supporting more game modes and a greater number of players. We also aim to broaden compatibility with additional card-based board games, transforming the system into a general-purpose automatic game master. These improvements will involve not only software logic updates but also mechanical upgrades for scalability and reliability.
+  </p>
+
+  <ul>
+    <strong>What did you learn in ESE5160 through the lectures, assignments, and this course-long prototyping project?</strong>
+  </ul>
+
+  <p>
+    Through this course, we deeply explored a wide range of driver development tasks, including writing drivers for LCD screens, stepper motors, DC motors, and the BH1750 light sensor. More importantly, we built a foundational understanding of SPI and I2C communications under FreeRTOS, learning both the theory and hands-on integration from the ground up.
+  </p>
+
+  <p>
+    As a beginner with no prior experience in FreeRTOS, I also learned how to structure embedded applications using RTOS concepts — task scheduling, synchronization, and memory management. We practiced real debugging workflows using tools like breakpoints, Percepio Tracealyzer, and Saleae logic analyzers, which gave us practical skills in tracking down and fixing timing and signal issues.
+  </p>
+
+  <p>
+    Lastly, we completed a full-cycle embedded hardware development experience: designing our own PCB from scratch, testing power rails and signal interfaces, validating sensor connections, and integrating the whole system into a functional prototype. This comprehensive journey gave us the confidence to move from idea to hardware implementation and deliver a polished, real-world system.
+  </p>
+</section>
+
+
+
+<section>
+  <h3>Project Links</h3>
+  <ul>
+    <li>Node-RED: <a href="http://172.178.54.240:1880/#flow/4cb998bb43ee545e">Node-RED Link</a></li>
+    <li>Node-RED ui instance for our review: <a href="http://172.178.54.240:1880/ui/#!/1?socketid=EJO-iwB96FL0mT6vAAAb">Node-RED ui Link</a></li>
+    <li>Codes: <a href="https://github.com/ese5160/final-project-t08-gambler.git">Final Link</a></li>
+    <li>Final PCBA on Altium 365: <a href="https://upenn-eselabs.365.altium.com/designs/AF0BA38A-AE81-4294-B339-25B666E7E02C?variant=[No+Variations]&activeDocumentId=Top20Level.SchDoc(1)&activeView=SCH&location=[1,99.39,-0.01,26.95]#design">PCBA Link</a></li>
+  </ul>
+</section>
+
+
+<section>
+  <h2>3. Hardware & Software Requirements</h2>
+  <hr>
+  <h3>3.1 Hardware Requirements Specification (HRS)</h3>
+  <p><strong>Overview:</strong><br>
+    The automatic poker dealing machine is built around the SAMW25 microcontroller, which provides Wi-Fi connectivity. Through the Wi-Fi module, users can control various settings via a mobile phone, including the number of players, game mode, starting dealer position, and randomization methods.
+  </p>
+  <ul>
+    <li><strong>HRS 01 - Microcontroller Core:</strong> The project shall use the SAMW25 microcontroller, which provides Wi-Fi connectivity.</li>
+
+    <ul>
+    <li>Check, we used our custom PCB for demo and video.</li> </ul>
+
+    <li><strong>HRS 02 - Card Dealing:</strong> A DC motor will be used to control the number of cards dealt in a single turn. The quantity will be managed by adjusting the motor's speed and operating duration.</li>
+
+    <ul>
+  <li>Check, the DC motor precisely controls the number of cards dealt by adjusting run time. The dealing process is smooth and without jamming.</li> </ul>
+
+
+    <li><strong>HRS 03 - Direction Control:</strong> A stepper motor will be used at the base to control the card dealing direction. The motor will support 2 to 4 directions, allowing the system to accommodate games with 2 to 4 players seamlessly.</li>
+    <ul>
+  <li>Check, the stepper motor supports dealing in multiple directions. Combined with the DC motor, it ensures cards are accurately delivered to each player.</li>
+</ul>
+
+    <li><strong>HRS 04 - Card Count and Motor Optimization:</strong> Using a Reflective Photo Interrupt Sensor to calculate the number of cards dealt by measuring the time it is obstructed during operation. This sensor will also aid in the control and optimization of the DC motor to ensure precise card dealing, as achieving accuracy with a DC motor alone can be challenging.</li>
+
+    <ul>
+  <li>Not completed. Due to PCB manufacturing issues, we could only allocate pins for one sensor. We prioritized the more critical BH1750 light sensor.</li>
+</ul>
+
+    <li><strong>HRS 05 - Card Box Monitoring:</strong> A Light Sensor will be placed in the card box to monitor the remaining cards, ensuring the system can provide real-time updates on card availability.</li>
+
+    <ul>
+  <li>
+    Completed. The BH1750 sensor successfully detects when the card tray is empty. When no cards remain, the system stops dealing automatically, and pressing the "Start Dealing" button has no effect.  
+    Additionally, sensor data is uploaded and viewable on the cloud dashboard.
+  </li>
+</ul>
+
+    <li><strong>HRS 06 - Wi-Fi Internet Connectivity:</strong> Utilizing the integrated Wi-Fi in the SAM W25, the device will connect to the internet, enabling it to upload acquired data to a remote display and allowing for remote control.</li>
+
+
+  <ul>
+  <li>
+    Completed. The device successfully connects to the internet, supports remote card dealing, real-time sensor data updates to the cloud, and enables one-click OTAU (Over-the-Air Update) functionality.
+  </li>
+</ul>
+  </ul>
+
+
+  <h3>3.2 Software Requirements Specification (SRS)</h3>
+  <p><strong>Overview:</strong><br>
+    This project centers on orchestrating several hardware components—namely the SAMW25 microcontroller, DC motor, stepper motor, and photo interrupt sensors—into an integrated, user-friendly system. It provides a secure, Wi-Fi–based interface to configure various game modes and player settings, executes a randomization algorithm to ensure fair dealing, and continuously monitors sensor data to guarantee accurate card distribution. Through its mobile app control, error detection, and optional over-the-air updates, the software delivers a robust, responsive, and maintainable platform for automated card dealing.
+  </p>
+
+  <ul>
+    <li><strong>SRS 01 – Initialization and Configuration:</strong> The system shall initialize and configure the SAMW25 microcontroller, including setting up the Wi-Fi module and any necessary network configurations.</li>
+
+      <ul>
+    <li>Completed. All system initialization and network setup functions worked as expected.</li>
+  </ul>
+    <li><strong>SRS 02 – Randomization and Shuffle Logic:</strong> The software shall implement a PRNG to randomize the sequence of card dealing, ensuring fairness.</li>
+      <ul>
+    <li>Not completed. Due to limited heap space consumed by other FreeRTOS tasks, we chose to prioritize critical functionality and did not implement the shuffle logic.</li>
+  </ul>
+
+    <li><strong>SRS 03 – DC Motor Control for Card Output:</strong> The software shall determine the DC motor speed and duration based on the required number of cards per dealing cycle. It shall adjust motor operation in real-time, using sensor feedback to correct miscounts or jams.</li>
+    <ul>
+    <li>Completed. DC motor control works smoothly and consistently, with accurate card output in each cycle.</li>
+  </ul>
+
+    <li><strong>SRS 04 – Stepper Motor Direction Control:</strong> The software shall rotate the stepper motor to direct the next card(s) to the selected player position (2–4 possible directions).</li>
+      <ul>
+    <li>Completed. The stepper motor correctly adjusts direction to deliver cards to different players, working in coordination with the DC motor.</li>
+  </ul>
+
+    <li><strong>SRS 05 – Sensor Integration for Card Counting:</strong> The software shall continuously read the first Reflective Photo Interrupt Sensor to count cards as they are dealt, ensuring accuracy. A second sensor, placed within the card tray, shall monitor the deck supply, triggering low-deck or empty-deck alerts.</li>
+      <ul>
+    <li>Not completed. As mentioned in HRS04, due to PCB fabrication issues, we were only able to connect one sensor — the BH1750 — and chose it over the reflective sensor for tray monitoring.</li>
+  </ul>
+
+    <li><strong>SRS 06 – Wi-Fi Connectivity and Remote Control:</strong> The software shall connect to a local network using the SAMW25’s Wi-Fi interface. The user shall be able to configure game parameters (e.g., player count, game mode, dealer position) through a mobile or web-based interface.</li>
+    <ul>
+  <li>Completed. Remote control now works smoothly and reliably, with no noticeable delay or glitches during operation.</li>
+</ul>
+
+
+  </ul>
+</section>
+
+
+    <!-- 2. Images  -->
+    <section>
+        <h2>4. Images</h2>
+        <hr>
+
+        <h3>Final Project Imaging</h3>
+
+        <div align="center">
+            <img src="Website/images/top.jpg" alt="The whole Smart home">
+        </div>
+
+        <div align="center">
+            <img src="Website/images/isometric.jpg" alt="The whole Smart home">
+        </div>
+
+        <div align="center">
+            <img src="Website/images/2.jpg" alt="The whole Smart home">
+        </div>
+
+                <div align="center">
+            <img src="Website/images/1.jpg" alt="The whole Smart home">
+        </div>
+
+        <h3>3D Prints</h3>
+        <div align="center">
+            <img src="Website/images/front1.jpg" alt="The whole Smart home">
+        </div>
+        <div align="center">
+            <img src="Website/images/front2.jpg" alt="The whole Smart home">
+        </div>
+
+        <h3>Solidworks model and Exploded view</h3>
+
+        <div align="center">
+            <img src="Website/images/Overall.png" alt="The whole Smart home">
+        </div>
+
+        <div align="center">
+            <img src="Website/images/Base.png" alt="The whole Smart home">
+        </div>
+
+
+        <p>
+        Exploded View Demo:
+        <a href="https://www.youtube.com/watch?v=mnMaH9pMG9w" target="_blank">Click here to view the exploded mechanical structure video</a>
+        </p> 
+
+        <h3>PCBA</h3>
+        <div align="center">
+            <img src="Website/images/PCBA_TOP.jpg" alt="The whole Smart home">
+        </div>
+
+        <div align="center">
+            <img src="Website/images/PCBA_BOT.jpg" alt="The whole Smart home">
+        </div>
+
+         <h3>The Altium Board design in 2D view</h3>
+        <div align="center">
+            <img src="Website/images/2D.png" alt="The whole Smart home">
+        </div>
+
+
+         <h3>The Altium Board design in 3D view</h3>
+        <div align="center">
+            <img src="Website/images/3D.png" alt="The whole Smart home">
+        </div>
+
+         <h3>Node-RED dashboard</h3>
+        <div align="center">
+            <img src="Website/images/frontend.png" alt="The whole Smart home">
+        </div>
+
+         <h3>Node-RED backend</h3>
+        <div align="center">
+            <img src="Website/images/backend.png" alt="The whole Smart home">
+        </div>
+
+         <h3>Block diagram</h3>
+        <div align="center">
+            <img src="Website/images/Detailed_System_Diagram_updated.png" alt="The whole Smart home">
+        </div>
+
+                 <h3>Demo Day</h3>
+
+                         <div align="center">
+            <img src="Website/images/demoday.png" alt="The whole Smart home">
+        </div>
+
+        <div align="center">
+            <img src="Website/images/Cover.jpg" alt="The whole Smart home">
+        </div>
+
+    </section>
+    <br><br>
+
+ 
+
+  
+<h2>5. Codebase</h2>
+<p>On our GitHub Pages website, we include:</p>
+<ul>
+  <li><a href="https://github.com/ese5160/final-project-t08-gambler" target="_blank">A link to our final embedded C firmware codebases (Mainly on Application and Bootloader)</a></li>
+  <li><a href="https://github.com/ese5160/final-project-t08-gambler/tree/main/NodeRED" target="_blank">A link to our Node-RED dashboard code</a></li>
+
+</ul>
+
+<br> <br>
+
+    <footer>
+        <p>Many thanks to Dr. Nicholas McGill-Gardner, Our TA: Yining Xia and all guys in this course. </p>
+        <p>Project by <a href="https://github.com/HTUPENN">Hao Tan</a>, <a href="https://github.com/TianyuGao1">Tianyu Gao</a> </p>
+    </footer>
+</body>
+</html>
